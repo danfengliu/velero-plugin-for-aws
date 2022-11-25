@@ -63,7 +63,7 @@ jobs:
 
     # Only try to publish the container image from the root repo; forks don't have permission to do so and will always get failures.
     - name: Publish container image
-      if: github.repository == 'vmware-tanzu/velero-plugin-for-aws'
+      if: github.repository != 'vmware-tanzu/velero-plugin-for-aws'
       run: |
         docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
         VERSION=$(./hack/docker-push.sh | grep 'VERSION:' | awk -F: '{print $2}' | xargs)
@@ -73,13 +73,16 @@ jobs:
         BIN=velero-plugin-for-aws
         GCS_BUCKET=velero-builds
         VELERO_PLUGIN_IMAGE=${BIN}-${VERSION}
+
         VELERO_PLUGIN_IMAGE_FILE=${VELERO_PLUGIN_IMAGE}.tar.gz
+
         VELERO_PLUGIN_IMAGE_BACKUP_FILE=${VELERO_PLUGIN_IMAGE}-'build.'${GITHUB_RUN_NUMBER}.tar.gz
 
         cp ${VELERO_PLUGIN_IMAGE_FILE} ${VELERO_PLUGIN_IMAGE_BACKUP_FILE}
 
         uploader ${VELERO_PLUGIN_IMAGE_FILE} ${GCS_BUCKET}
         uploader ${VELERO_PLUGIN_IMAGE_BACKUP_FILE} ${GCS_BUCKET}
+
 
     # Use the JSON key in secret to login gcr.io
     - uses: 'docker/login-action@v1'
