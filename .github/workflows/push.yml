@@ -73,7 +73,6 @@ jobs:
         BIN=velero-plugin-for-aws
         GCS_BUCKET=velero-builds
         VELERO_PLUGIN_IMAGE=${BIN}-${VERSION}
-        VELERO_PLUGIN_IMAGE_FILE=${VELERO_PLUGIN_IMAGE}.tar.gz
         VELERO_PLUGIN_IMAGE_BACKUP_FILE=${VELERO_PLUGIN_IMAGE}-'build.'${GITHUB_RUN_NUMBER}.tar.gz
 
         cp ${VELERO_PLUGIN_IMAGE_FILE} ${VELERO_PLUGIN_IMAGE_BACKUP_FILE}
